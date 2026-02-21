@@ -44,10 +44,10 @@ cd windows-amd64
 cp ../.env.example .env
 ```
 
-编辑 `.env` 文件，至少配置以下必需项：
+编辑 `.env` 文件，配置以下必需项：
 
 ```bash
-XCODE_API_TOKEN=your_api_token_here
+XCODE_API_TOKEN=your_token_here
 XCODE_ROBOT_ID=your_robot_id_here
 ```
 
@@ -93,76 +93,36 @@ XCODE_ROBOT_ID=your_robot_id_here
 一键创建项目、Agent、Rules 和初始任务。
 
 ```bash
-# 最简单的方式：仅指定项目名称（自动生成 project-code）
+# 最简单的方式：仅指定项目名称
 ./xbot-init --project-name "my-project"
-
-# 使用默认配置
-./xbot-init --config templates/xbot-init.yaml
-
-# 自定义项目信息
-./xbot-init --config templates/xbot-init.yaml --project-name my-project --project-code my-project
-
-# 回滚项目（仅限 xbot-init 创建的项目）
-./xbot-init rollback --project-code my-project
 ```
 
-**配置模板**：`templates/xbot-init.yaml`
-
-支持占位符（执行时自动替换）：
-- `{project_name}` - 项目名称
-- `{project_code}` - 项目代码
-- `{project_slug}` - 项目标识
+更多参数请使用 `./xbot-init --help` 查看。
 
 ### xbot-prompt - 项目环境同步
 
 同步项目的 Agent、Rules 和 Skills 到本地工作区。
 
 ```bash
-# 更新模式（默认）：同步最新的项目配置
-./xbot-prompt --mode update --project-code my-project
+# 更新模式（默认）：从服务器同步到本地
+./xbot-prompt
 
-# 初始化模式：首次创建项目环境
-./xbot-prompt --mode init --project-code my-project
+# 或者显式指定 update 模式
+./xbot-prompt update
 
-# 推送模式：将本地修改推送到服务器
-./xbot-prompt --mode push --project-code my-project
+# 推送模式：将本地修改的 Agent 和 Rules 推送到服务器
+./xbot-prompt push
 
-# 指定工作区根目录
-./xbot-prompt --mode update --project-code my-project --output-root /path/to/workspace
-
-# 强制覆盖已有目录（仅 init 模式）
-./xbot-prompt --mode init --project-code my-project --force
+# 初始化模式：首次初始化项目环境（会覆盖现有目录）
+./xbot-prompt init --force
 ```
 
 **模式说明**：
+- `update`（默认）：从服务器同步 Agent、Rules 和 Skills 到本地，更新本地文件
+- `push`：将本地修改的 Agent 和 Rules 文件推送到服务器，仅更新有变化的文件
+- `init`：首次初始化项目环境，创建目录结构并下载所有资源
 
-| 模式 | 用途 | 说明 |
-|------|------|------|
-| `init` | 初始化 | 首次创建项目环境，如果目录已存在会报错（除非使用 `--force`） |
-| `update` | 更新 | 同步最新的项目配置到本地，默认模式 |
-| `push` | 推送 | 检测本地文件变化并推送到服务器，仅更新有变化的文件 |
-
-**参数说明**：
-
-- `--mode`: 操作模式，可选值 `init`|`update`|`push`，默认 `update`
-- `--project-code`: 项目代码，不传则从机器人配置自动推断
-- `--output-root`: 工作区根目录，默认自动检测 Git 仓库根目录或当前目录
-- `--force`: 强制覆盖目标目录（仅 `init` 模式有效）
-
-**项目 code 优先级**：
-1. 命令行参数 `--project-code`
-2. 机器人关联的项目代码（robot.project.code）
-3. 机器人配置中的项目代码（robot.config.project_code）
-
-**输出文件结构**：
-```
-.xbot_prompt/
-├── agent/              # Agent 配置文件
-├── rules/              # Rules 配置文件
-├── skills/             # Skills 配置文件
-├── AGENTS.md           # 项目环境总览
-└── manifest.json       # 同步记录和文件校验信息
-```
+更多参数请使用 `./xbot-prompt --help` 查看。
 
 ### xbot-requirement - 需求上传
 
@@ -170,35 +130,20 @@ XCODE_ROBOT_ID=your_robot_id_here
 
 ```bash
 # 上传文件
-./xbot-requirement --file task.md --project-code my-project
-
-# 上传目录（递归上传 .md/.sql 文件）
-./xbot-requirement --file ./docs --project-code my-project
-
-# 指定需求类型
-./xbot-requirement --file task.md --project-code my-project --type feature
+./xbot-requirement --file task.md
 ```
 
-**参数说明**：
-- `--file`: 文件或目录路径
-- `--project-code`: 项目代码
-- `--type`: 需求类型（`feature`|`design`|`bugfix`）
-- `--name`: 需求名称（可选）
+更多参数请使用 `./xbot-requirement --help` 查看。
 
 ### xbot-task-local - 本地任务执行
 
 在本地工作区执行单次任务。
 
 ```bash
-# 使用默认配置
 ./xbot-task-local
-
-# 使用在线配置
-./xbot-task-local --online-config online_config_example.json
-
-# 使用任务规格模板
-./xbot-task-local --spec templates/xbot_spec.template
 ```
+
+更多参数请使用 `./xbot-task-local --help` 查看。
 
 ### xbot-task-remote - 远程任务执行
 
@@ -208,35 +153,7 @@ XCODE_ROBOT_ID=your_robot_id_here
 ./xbot-task-remote
 ```
 
-## 配置说明
-
-### 核心配置
-
-```bash
-# API 配置
-XCODE_API_URL=https://api.alrun.cn
-XCODE_API_TOKEN=your_token_here
-XCODE_ROBOT_ID=your_robot_id_here
-
-# 项目配置
-XCODE_PROJECT_CODE=my-project
-
-# 数据库（SQL worker 可选）
-DATABASE_URL=postgresql://user:pass@host:5432/dbname
-```
-
-### 模型命令配置
-
-为不同模型配置执行命令，未配置的模型任务会被自动跳过。
-
-```bash
-XCODE_MODEL_CODEX_CMD="codex exec --full-auto"
-XCODE_MODEL_QWEN_CMD="qwen -y --model deepseek-v3.2"
-XCODE_MODEL_GPT4_CMD="openai gpt-4 --auto"
-XCODE_MODEL_CLAUDE_CMD="anthropic claude-2 --auto"
-XCODE_MODEL_GEMINI_CMD="gemini -y -m flash -p"
-XCODE_MODEL_CUSTOM_CMD="your-custom-command"
-```
+更多参数请使用 `./xbot-task-remote --help` 查看。
 
 ## 文件结构
 
