@@ -1,0 +1,41 @@
+# 任务规格说明：{{.TaskName}}
+
+## 任务概述
+任务名称：{{.TaskName}}
+创建时间：{{.CreatedAt}}
+项目名称：{{.ProjectName}}
+项目代码：{{.ProjectCode}}
+
+## 任务目标
+{{.TaskDescription}}
+
+## 项目配置
+
+### Agent 配置
+{{range .Agents}}
+- {{.Title}} (ID: {{.ID}})
+{{else}}
+- 无
+{{end}}
+
+### Rules 配置
+{{range .Rules}}
+- {{.Title}} (ID: {{.ID}})
+{{else}}
+- 无
+{{end}}
+
+### Skills 配置
+{{range .Skills}}
+- {{.Name}}
+{{else}}
+- 无
+{{end}}
+
+## 执行说明
+1. 按照项目配置的 Agent 执行任务
+2. 遵循项目配置的 Rules 规范
+3. 使用项目配置的 Skills 辅助开发
+
+## 备注
+本任务通过 xbot-task-local --spec 参数自动创建。

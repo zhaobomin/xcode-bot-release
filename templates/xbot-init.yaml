@@ -1,0 +1,40 @@
+project:
+  name: "{project_name}"
+  code: "{project_code}"
+  description: "{project_name} initialized by xbot-init"
+
+agent:
+  name: "{project_code}-agent"
+  title: "{project_name} Agent"
+  type: "agent_md"
+  format: "markdown"
+  status: "active"
+  content: |
+    # Agent
+    You are a pragmatic coding agent for project: {project_name}.
+
+rules:
+  name: "{project_code}-rules"
+  title: "{project_name} Rules"
+  type: "rule"
+  format: "markdown"
+  status: "active"
+  content: |
+    # Rules
+    - Keep responses concise
+    - Verify before claiming completion
+
+bot:
+  name: "{project_code}-bot"
+  server: "local-dev"
+  status: "active"
+  # main_repo_dir: "/absolute/path/to/repo"
+  # worktree_base_dir: "/absolute/path/to/worktree"
+
+task:
+  name: "{project_name} Bootstrap Task"
+  description: "echo \"hello world\""
+  task_type: "command"
+  branch: "feature/{project_code}-bootstrap"
+  worktree_dir: "{project_code}-bootstrap"
+  status: "pending"

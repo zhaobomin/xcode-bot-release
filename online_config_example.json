@@ -1,0 +1,16 @@
+{
+    "main_repo_dir": "/opt/x_shadcn/main_dev",
+    "worktree_base_dir": "/opt/x_shadcn/worktree_tmp",
+    "model_commands": {
+        "codex": "codex exec --full-auto",
+        "custom": "gemini -y -m flash -p",
+        "gemini": "gemini -y -m flash -p"
+    },
+    "prompt_templates": {
+        "chat": "{task_description}",
+        "coding": "## 任务\n{task_name}\n\n## 任务描述\n{task_description}\n\n## Agent 文件\n- 名称: {agent_file_names}\n- 路径: {agent_file_paths}\n\n## 需求文档文件\n- 名称: {requirement_file_names}\n- 路径: {requirement_file_paths}\n\n## Rules 文件\n- 名称: {rule_file_names}\n- 路径: {rule_file_paths}\n\n请严格基于以上 Agent、Rules、需求文档完成代码实现，避免偏离文档约束。\n输出：在 {output_note_path} 记录任务执行过程。",
+        "command": "{task_description}",
+        "sql_command": "{task_description}",
+        "write_doc": "## 任务\n{task_name}\n\n## 任务描述\n{task_description}\n\n## Agent 文件\n- 名称: {agent_file_names}\n- 路径: {agent_file_paths}\n\n## 需求文档文件\n- 名称: {requirement_file_names}\n- 路径: {requirement_file_paths}\n\n## Rules 文件\n- 名称: {rule_file_names}\n- 路径: {rule_file_paths}\n\n约束：不要修改现有代码，只输出设计文档内容(.md)和数据库变更文件（.sql）。\n输出：在 {output_note_path} 记录任务执行过程。"
+    }
+}
