@@ -12,5 +12,13 @@
         "command": "{task_description}",
         "sql_command": "{task_description}",
         "write_doc": "## 任务\n{task_name}\n\n## 任务描述\n{task_description}\n\n## Agent 文件\n- 名称: {agent_file_names}\n- 路径: {agent_file_paths}\n\n## 需求文档文件\n- 名称: {requirement_file_names}\n- 路径: {requirement_file_paths}\n\n## Rules 文件\n- 名称: {rule_file_names}\n- 路径: {rule_file_paths}\n\n约束：不要修改现有代码，只输出设计文档内容(.md)和数据库变更文件（.sql）。\n输出：在 {output_note_path} 记录任务执行过程。"
+    },
+    "openclaw": {
+        "enabled": false,
+        "submit_url": "http://127.0.0.1:18789/v1/responses",
+        "auth_type": "bearer",
+        "auth_token": "",
+        "callback_secret": "",
+        "callback_url": "https://api.alrun.cn/api/v1/admin/openclaw/callback"
     }
 }
